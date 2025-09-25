@@ -52,6 +52,10 @@ if st.button("적분 그래프 그리기"):
         f_lamb = lambdify(x, func, 'numpy')
         X = np.linspace(a, b, 400)
         Y = f_lamb(X)
+        # Y가 스칼라(상수)일 경우 X와 같은 shape으로 변환
+        import numpy as np
+        if np.isscalar(Y):
+            Y = np.full_like(X, Y)
 
         # 적분값 계산
         integral_val = integrate(func, (x, a, b)).evalf()
