@@ -8,7 +8,7 @@ from sympy import sympify, Symbol, lambdify, integrate
 st.title("적분 그래프 시각화 앱")
 
 # 사용자 입력: 함수, 구간
-func_str = st.text_input("함수를 입력하세요 (예: x**2)", value="x**2")
+func_str = st.text_input("함수를 입력하세요 (예: x^2)", value="x^2")
 a = st.number_input("적분 시작값 a", value=0.0)
 b = st.number_input("적분 끝값 b", value=1.0)
 
