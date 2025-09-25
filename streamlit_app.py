@@ -29,6 +29,11 @@ for idx, (cat, funcs) in enumerate(func_examples.items()):
                 st.rerun()
 
 func_str = st.text_input("함수를 입력하세요 (예: x^2)", value=st.session_state["func_input"], key="func_input")
+# 로그함수 밑 입력창 추가
+log_base = None
+import re
+if re.match(r"log\s*\(.*\)", func_str):
+    log_base = st.text_input("로그함수의 밑을 입력하세요 (예: 2)", value="")
 
 # x값 입력 UI (함수에 x가 포함된 경우)
 
@@ -39,7 +44,11 @@ b = st.number_input("적분 끝값 b", value=1.0)
 if st.button("적분 그래프 그리기"):
     x = Symbol('x')
     try:
-        func = sympify(func_str.replace('^', '**'))
+        func_expr = func_str.replace('^', '**')
+        # log(x)일 때 밑이 입력되면 log(x, base)로 변환
+        if log_base and log_base.strip():
+            func_expr = re.sub(r"log\s*\(([^)]+)\)", f"log(\\1, {log_base})", func_expr)
+        func = sympify(func_expr)
         f_lamb = lambdify(x, func, 'numpy')
         X = np.linspace(a, b, 400)
         Y = f_lamb(X)
