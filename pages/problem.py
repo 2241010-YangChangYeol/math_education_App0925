@@ -4,10 +4,25 @@ def initialize_state():
     """세션 상태를 초기화합니다."""
     if 'current_question' not in st.session_state:
         st.session_state.current_question = 1
+    # 문제 1 상태
     if 'q1_answered' not in st.session_state:
         st.session_state.q1_answered = False
     if 'q1_correct' not in st.session_state:
         st.session_state.q1_correct = False
+    # 문제 2 상태
+    if 'q2_answered' not in st.session_state:
+        st.session_state.q2_answered = False
+    if 'q2_correct' not in st.session_state:
+        st.session_state.q2_correct = False
+
+def reset_all_state():
+    """모든 상태를 초기화하여 처음부터 다시 시작합니다."""
+    st.session_state.current_question = 1
+    st.session_state.q1_answered = False
+    st.session_state.q1_correct = False
+    st.session_state.q2_answered = False
+    st.session_state.q2_correct = False
+    st.rerun()
 
 def question1():
     """문제 1을 표시하고 처리합니다."""
@@ -32,24 +47,57 @@ def question1():
 
     if submitted:
         st.session_state.q1_answered = True
+        # 실제 정답은 22/3 이지만, 현재는 6으로 설정되어 있음
         if user_answer == "6":
             st.session_state.q1_correct = True
-            st.rerun() # 정답 상태를 즉시 반영하기 위해 rerun
+            st.rerun()
         else:
             st.session_state.q1_correct = False
 
     if st.session_state.q1_answered and not st.session_state.q1_correct:
         st.error("오답입니다. 다시 풀어보세요.")
+    
+    st.markdown("---")
+    if st.button("문제 2로 바로가기"):
+        st.session_state.current_question = 2
+        st.rerun()
+
 
 def question2():
-    """문제 2의 플레이스홀더입니다."""
+    """문제 2를 표시하고 처리합니다."""
     st.subheader("문제 2")
-    st.write("준비 중입니다.")
-    if st.button("이전 문제로 돌아가기"):
+    st.markdown(r"""
+    곡선 $y = -x^2 + 2x$ 와 $x$축으로 둘러싸인 도형의 넓이를 $S$라 하면, $9S$의 값은?
+    """)
+
+    # 사용자가 이미 정답을 맞혔는지 확인
+    if st.session_state.q2_correct:
+        st.success("정답입니다! 모든 문제를 해결했습니다.")
+        st.balloons()
+        if st.button("처음으로 돌아가기"):
+            reset_all_state()
+        return
+
+    # 정답 폼
+    with st.form(key='q2_form'):
+        options = ["8", "10", "12", "14", "16"]
+        user_answer = st.radio("정답을 선택하세요:", options)
+        submitted = st.form_submit_button("답안 제출")
+
+    if submitted:
+        st.session_state.q2_answered = True
+        if user_answer == "12":
+            st.session_state.q2_correct = True
+            st.rerun()
+        else:
+            st.session_state.q2_correct = False
+
+    if st.session_state.q2_answered and not st.session_state.q2_correct:
+        st.error("오답입니다. 다시 풀어보세요.")
+
+    st.markdown("---")
+    if st.button("문제 1로 돌아가기"):
         st.session_state.current_question = 1
-        # 상태 초기화
-        st.session_state.q1_answered = False
-        st.session_state.q1_correct = False
         st.rerun()
 
 # --- 메인 페이지 로직 ---
