@@ -13,9 +13,7 @@ def question1():
     """문제 1을 표시하고 처리합니다."""
     st.subheader("문제 1")
     st.markdown(r"""
-    함수 $f(x)$가 닫힌구간 $[0, 2]$ 에서 연속일 때,
-
-    곡선 $y=f(x)$와 $x$축 및 두 직선 $x=0, x=2$로 둘러싸인 부분의 넓이 $S$는?
+    함수 $f(x) = 2$ 에 대하여, 정적분 $\int_0^3 f(x)\,dx$의 값은?
     """)
 
     # 사용자가 이미 정답을 맞혔는지 확인
@@ -28,18 +26,13 @@ def question1():
 
     # 정답 폼
     with st.form(key='q1_form'):
-        options = [
-            r"$\int_0^2 f(x)\,dx$",
-            r"$f(2) - f(0)$",
-            r"$\frac{f(2)-f(0)}{2-0}$",
-            r"$f'(2)$"
-        ]
+        options = ["3", "4", "5", "6", "7"]
         user_answer = st.radio("정답을 선택하세요:", options)
         submitted = st.form_submit_button("답안 제출")
 
     if submitted:
         st.session_state.q1_answered = True
-        if user_answer == options[0]:
+        if user_answer == "6":
             st.session_state.q1_correct = True
             st.rerun() # 정답 상태를 즉시 반영하기 위해 rerun
         else:
