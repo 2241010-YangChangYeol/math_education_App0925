@@ -128,8 +128,63 @@ def question2():
     if st.session_state.q2_correct:
         st.success("정답입니다! 모든 문제를 해결했습니다.")
         st.balloons()
-        if st.button("처음으로 돌아가기"):
-            reset_all_state()
+
+        # --- 그래프 생성 ---
+        fig, ax = plt.subplots()
+        x = np.linspace(-0.5, 2.5, 400)
+        y = -x**2 + 2*x
+        
+        ax.plot(x, y, label='$y=-x^2+2x$')
+        ax.axhline(0, color='black', linewidth=0.5)
+        
+        # 넓이 영역 채우기
+        x_fill = np.linspace(0, 2, 200)
+        ax.fill_between(x_fill, -x_fill**2 + 2*x_fill, 0, color='lightgreen', alpha=0.5, label='Area S')
+        
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_title("Graph of $y=-x^2+2x$ and Area S")
+        ax.grid(True)
+        ax.legend()
+        st.pyplot(fig)
+
+        # --- 풀이 과정 ---
+        st.subheader("풀이 과정")
+        st.markdown(r"""
+        1.  **곡선과 x축의 교점 찾기**:
+            넓이를 구하기 위해 적분 구간을 설정해야 합니다. 곡선이 $x$축과 만나는 점은 $y=0$일 때입니다.
+            $$
+            -x^2 + 2x = 0 \implies x(-x+2) = 0
+            $$
+            따라서 교점은 $x=0$과 $x=2$입니다. 적분 구간은 $[0, 2]$가 됩니다.
+
+        2.  **넓이 S 계산**:
+            구간 $[0, 2]$에서 함수 $-x^2+2x$는 $0$보다 크거나 같으므로, 넓이 $S$는 정적분 값과 같습니다.
+            $$
+            S = \int_0^2 (-x^2+2x)\,dx
+            $$
+
+        3.  **정적분 계산**:
+            $$
+            \begin{aligned}
+            S &= \left[-\frac{x^3}{3} + x^2\right]_0^2 \\
+            &= \left(-\frac{2^3}{3} + 2^2\right) - (0) \\
+            &= -\frac{8}{3} + 4 = -\frac{8}{3} + \frac{12}{3} = \frac{4}{3}
+            \end{aligned}
+            $$
+
+        4.  **9S의 값 계산**:
+            $$
+            9S = 9 \times \frac{4}{3} = 12
+            $$
+        따라서, 구하는 값은 $12$ 입니다.
+        """)
+
+        # "처음으로 돌아가기" 버튼을 오른쪽에 배치
+        _, col2 = st.columns([0.8, 0.2])
+        with col2:
+            if st.button("처음으로 돌아가기", key="reset_from_q2"):
+                reset_all_state()
         return
 
     # 정답 폼
