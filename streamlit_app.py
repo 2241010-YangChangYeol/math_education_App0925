@@ -45,6 +45,10 @@ if st.button("적분 그래프 그리기"):
     x = Symbol('x')
     try:
         func_expr = func_str.replace('^', '**')
+        # 분수표현: a/b, a/(x+1), (x+1)/2 등 다양한 케이스를 괄호로 감싸서 sympy가 안전하게 해석하도록 변환
+        # 1) 숫자/식, 2) 식/식, 3) 식/숫자 모두 지원
+        # 괄호 없는 a/b -> (a)/(b)로 변환 (단, a, b는 숫자, 문자, 괄호, x 등 모두 가능)
+        func_expr = re.sub(r'(?<![\w)])\s*([\w\d\.\+\-\*]+)\s*/\s*([\w\d\.\+\-\*xX\(\)]+)', r'(\1)/(\2)', func_expr)
         # log(x)일 때 밑이 입력되면 log(x, base)로 변환
         if log_base and log_base.strip():
             func_expr = re.sub(r"log\s*\(([^)]+)\)", f"log(\\1, {log_base})", func_expr)
