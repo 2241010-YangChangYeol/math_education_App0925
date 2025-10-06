@@ -75,6 +75,7 @@ if st.button("적분 그래프 그리기"):
             plt.rc('font', family='sans-serif')
             plt.rcParams['axes.unicode_minus'] = False
 
+        fontprop = fm.FontProperties(fname=font_path)
         fig, ax = plt.subplots()
         ax.plot(X, Y, label=f"f(x) = {func_str}", color='blue')
         ax.fill_between(X, Y, where=[True]*len(X), alpha=0.3, color='orange', label="적분 영역")
