@@ -1,4 +1,3 @@
-
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
@@ -64,9 +63,17 @@ if st.button("적분 그래프 그리기"):
         # 적분값 계산
         integral_val = integrate(func, (x, a, b)).evalf()
 
-        font_path = "fonts/NanumGothic-Regular.ttf"
-        fontprop = fm.FontProperties(fname=font_path)
-        plt.rc('font', family=fontprop.get_name())
+        # 폰트 설정
+        try:
+            font_path = 'fonts/NanumGothic-Regular.ttf'
+            font_name = fm.FontProperties(fname=font_path).get_name()
+            plt.rc('font', family=font_name)
+            plt.rcParams['axes.unicode_minus'] = False
+        except FileNotFoundError:
+            st.error(f"폰트 파일을 찾을 수 없습니다: {font_path}. 'fonts' 디렉토리에 폰트 파일이 있는지 확인하세요.")
+            # 대체 폰트 사용
+            plt.rc('font', family='sans-serif')
+            plt.rcParams['axes.unicode_minus'] = False
 
         fig, ax = plt.subplots()
         ax.plot(X, Y, label=f"f(x) = {func_str}", color='blue')
