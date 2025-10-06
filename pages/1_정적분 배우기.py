@@ -29,10 +29,12 @@ st.write("""
 아래는 함수 $f(x) = x^2$의 그래프와, 그 아래 영역을 10개의 직사각형으로 근사한 예시입니다.
 """)
 
+# --- 직사각형 개수 슬라이더 추가 ---
+n = st.slider('직사각형 개수 n', min_value=2, max_value=100, value=10)
+
 # 예시: f(x) = x^2, [0, 2] 구간
 f = lambda x: x**2
 a, b = 0, 2
-n = 10 # 직사각형 개수0 
 
 # 그래프를 위한 x, y 값
 x_curve = np.linspace(a, b, 500)
